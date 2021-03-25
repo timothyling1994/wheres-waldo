@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+html,body{
+  padding:0px;
+  margin:0px;
+}
+
+.App{
+  font-family: 'Anton', sans-serif;
+  font-size:50px;
+}
+
+.Home{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content: center;
+  align-content: center;
+}
+
+.header{
+  width:100%;
+  text-align:center;
+}
+
+.levels-container{
+  display:flex;
+}
+
+.Card{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content: center;
+  align-content: center;
+  width:30vw;
+  margin:1vw;
+  padding:0.5vw;
+
+}
+
+.Card:hover{
+    box-shadow: 3px 3px 5px 2px rgba(0,0,0,.2);
+    transform: scale(1.005);
+    transition: all .1s ease-out;
+}
+
+.Card img{
+  width:30vw;
+  height:35vh;
+}
+.card-description{
+  display:flex;
+  align-items:center;
+  width:100%;
+}
+
+.level{
+  font-size:30px;
+}
+
+.profile-pic-container{
+  margin-left:auto;
+}
+
+.card-description img{
+  width:3vw;
+  height:3vw;
+}
