@@ -24,6 +24,12 @@ html,body{
 
 .levels-container{
   display:flex;
+  text-decoration: 'none';
+}
+
+.link{
+  color: inherit;
+  text-decoration: inherit;
 }
 
 .Card{
@@ -53,7 +59,7 @@ html,body{
   width:100%;
 }
 
-.level{
+.level-label{
   font-size:30px;
 }
 
@@ -64,4 +70,40 @@ html,body{
 .card-description img{
   width:3vw;
   height:3vw;
+  border-radius: 50%;
+  border: solid black 2px;
+  margin:0.5vw;
+}
+
+.Level{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content: center;
+  align-content: center;
+}
+
+.find-people-container{
+  width:100%;
+  display:flex;
+  justify-content: center;
+  align-content: center;
+  padding:1vw;
+}
+.people{
+  display:flex;
+  flex-wrap: wrap;
+  width:8vw;
+
+}
+.people-label{
+  font-size:15px;
+  text-align:center;
+  width:100%;
+}
+.find-people-container img{
+  width:6vw;
+  height:6vw;
+  margin:1vw;
+  border: solid black 2px;
+  border-radius: 50%;
 }
