@@ -7,8 +7,9 @@ function Level(props){
 	const [scrolled,setScrolled] = useState(false);
 	const thisLevelSettings = props.levelSettings[props.getLevel()];
 
+
 	const drawRect = (target) => { 
-		console.log(target.pageX);
+
 		if(target.pageX-50>=0 && target.pageY-50>=0)
 		{
 			let rectBox = document.createElement("div");
@@ -21,14 +22,20 @@ function Level(props){
 
 	const handleScroll = () => {
 		const offset = window.scrollY;
-		if(offset>200)
+		const main_img = document.querySelector(".main-img-container");
+
+		if(offset>50)
 		{
 			setScrolled(true);
+			main_img.classList.add("shift-main-image");
+
 		}
 		else
 		{
 			setScrolled(false);
+			main_img.classList.remove("shift-main-image");
 		}
+
 	};
 
 	useEffect(()=>{
@@ -49,15 +56,21 @@ function Level(props){
 			<Link to={"/"} className="link"><div className="header">WHERE'S WALDO</div></Link>
 			<div className={findPeopleBar.join(" ")}>
 				<div className="people">
-					<img className="people-img" src={thisLevelSettings.findPeoplePics[0]}></img>
+					<div className="people-img-container">
+						<img className="people-img" src={thisLevelSettings.findPeoplePics[0]}></img>
+					</div>
 					<div className="people-label">{thisLevelSettings.findPeople[0]}</div>
 				</div>
 				<div className="people">
-					<img className="people-img" src={thisLevelSettings.findPeoplePics[1]}></img>
+					<div className="people-img-container">
+						<img className="people-img" src={thisLevelSettings.findPeoplePics[1]}></img>
+					</div>
 					<div className="people-label">{thisLevelSettings.findPeople[1]}</div>
 				</div>
 				<div className="people">
-					<img className="people-img" src={thisLevelSettings.findPeoplePics[2]}></img>
+					<div className="people-img-container">
+						<img className="people-img" src={thisLevelSettings.findPeoplePics[2]}></img>
+					</div>
 					<div className="people-label">{thisLevelSettings.findPeople[2]}</div>
 				</div>
 			</div>
