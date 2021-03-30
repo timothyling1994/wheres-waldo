@@ -1,10 +1,13 @@
 import React from "react";
 import {useState,useEffect} from "react";
 import { Link } from "react-router-dom";
+import DropDown from "./DropDown.js";
 
 function Level(props){
 
 	const [scrolled,setScrolled] = useState(false);
+	const [currentClick,setCurrentClick] = useState([]);
+	const [showSelectionDropDown,setShowSelectionDropDown] = useState(false);
 	const thisLevelSettings = props.levelSettings[props.getLevel()];
 
 
@@ -17,7 +20,15 @@ function Level(props){
 			rectBox.style.left=(target.pageX-50)+'px';
 			rectBox.style.top=(target.pageY-50)+'px';
 			document.body.appendChild(rectBox);
+
+			showSelectionModal(target.pageX,target.pageY);
 		}
+	};
+
+	const showSelectionModal = (clickXCoord,clickYCoord) => {
+
+		setCurrentClick([clickXCoord,clickYCoord]);
+		setShowSelectionDropDown(true);
 	};
 
 	const handleScroll = () => {
@@ -74,7 +85,10 @@ function Level(props){
 					<div className="people-label">{thisLevelSettings.findPeople[2]}</div>
 				</div>
 			</div>
-			<div className="main-img-container"><img onClick={(target)=>{drawRect(target)}} className="main-img" src={thisLevelSettings.imgSrc}></img></div>
+			<div className="main-img-container">
+				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} currentClick={currentClick}/> : null}
+				<img onClick={(target)=>{drawRect(target)}} className="main-img" src={thisLevelSettings.imgSrc}></img>
+			</div>
 		</div>
 	);
 }

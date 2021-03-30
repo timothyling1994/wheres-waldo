@@ -150,7 +150,38 @@ html,body{
 
 .rectBox { 
   position: absolute;
-  border:solid black 5px;
+  border:solid yellow 3px;
   width:100px;
   height:100px;
+  z-index:0.1;
+}
+
+.DropDown{
+  display:flex;
+  flex-wrap:wrap;
+  align-content: flex-start;
+  border:solid black 1px;
+  height:15vw;
+  width:15vw;
+  background-color: lightgrey;
+  z-index: 0.5;
+}
+
+.people-drop-down-container{
+  display:flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  width:100%;
+  height:5vw;
+} 
+
+.people-pic-drop-down{
+  float:left;
+  height:3vw;
+  width:3vw;
+}
+.people-label-drop-down{
+  float:right;
+  font-size:10px;
 }
