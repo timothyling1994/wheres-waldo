@@ -10,8 +10,16 @@ function Level(props){
 	const [showSelectionDropDown,setShowSelectionDropDown] = useState(false);
 	const thisLevelSettings = props.levelSettings[props.getLevel()];
 
-
 	const drawRect = (target) => { 
+		let elementList = document.querySelectorAll(".rectBox");
+
+		elementList.forEach(element=>{
+			if(!element.classList.contains("found"))
+			{
+				document.body.removeChild(element);
+			}
+		});
+
 
 		if(target.pageX-50>=0 && target.pageY-50>=0)
 		{
@@ -29,6 +37,18 @@ function Level(props){
 
 		setCurrentClick([clickXCoord,clickYCoord]);
 		setShowSelectionDropDown(true);
+	};
+
+	const isCorrectSelection = (xCoord,yCoord,people_label) => {
+
+		if((xCoord >= ((props.solution[people_label][0])-60) && xCoord <= ((props.solution[people_label][0])+60)) && (yCoord >= ((props.solution[people_label][1])-60) && yCoord <= ((props.solution[people_label][1])+60)))
+		{
+			console.log(true);
+			return true;
+		}
+
+		console.log(false);
+		return false;
 	};
 
 	const handleScroll = () => {
@@ -86,7 +106,7 @@ function Level(props){
 				</div>
 			</div>
 			<div className="main-img-container">
-				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} currentClick={currentClick}/> : null}
+				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} currentClick={currentClick} isCorrectSelection={isCorrectSelection}/> : null}
 				<img onClick={(target)=>{drawRect(target)}} className="main-img" src={thisLevelSettings.imgSrc}></img>
 			</div>
 		</div>
