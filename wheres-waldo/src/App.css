@@ -20,6 +20,11 @@ html,body{
 .header{
   width:100%;
   text-align:center;
+  transition:0.3s;
+}
+
+.header:hover{
+  color:red;
 }
 
 .levels-container{
@@ -87,16 +92,21 @@ html,body{
   display:flex;
   justify-content: center;
   align-content: center;
-  padding:1vw;
+  padding-top:1vw;
+  padding-bottom:1.5vw;
+  background-color: white;
 }
 .people{
   display:flex;
   flex-wrap: wrap;
   width:8vw;
+}
 
+.people-img:hover{
+  background:yellow;
 }
 .people-label{
-  font-size:15px;
+  font-size:20px;
   text-align:center;
   width:100%;
 }
@@ -106,4 +116,29 @@ html,body{
   margin:1vw;
   border: solid black 2px;
   border-radius: 50%;
+}
+
+.main-img-container{
+  width:100%;
+  display:flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.main-img{
+  height:1920px;
+  width:1280px;
+}
+
+.sticky {
+  position:fixed;
+  top:0;
+  width:100%;
+}
+
+.rectBox { 
+  position: absolute;
+  border:solid black 5px;
+  width:100px;
+  height:100px;
 }
