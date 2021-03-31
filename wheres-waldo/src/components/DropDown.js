@@ -1,11 +1,6 @@
 import React from "react";
 
-
-
 function DropDown(props){
-
-	//console.log(props.currentClick[0]);
-	//console.log(props.currentClick[1]);
 
 	let xCoord;
 	let yCoord = props.currentClick[1];
@@ -27,25 +22,45 @@ function DropDown(props){
 	};	
 
 	const validateSelection = (people_label) => {
+
 		let result = props.isCorrectSelection(props.currentClick[0],props.currentClick[1],people_label);
+		if(result)
+		{
+			let rect = props.getCurrentRect();
+			rect.classList.add("found");
+			rect.classList.add("correct");
+			setTimeout(function(){
+				props.clearNotFoundRect();
+				props.toggleDropDown(false);
+			},1000);
+		}
+		else
+		{
+			let rect = props.getCurrentRect();
+			rect.style.borderColor="red";
+			rect.classList.add("shake");
+			setTimeout(function(){
+				props.clearNotFoundRect();
+				props.toggleDropDown(false);
+			},1000);
+		}
+
 	};
-
-
 
 
 	return(	
 		
 		<div className="DropDown" style={myStyle}>
 			<div className="people-drop-down-container" onClick={()=>{validateSelection(props.thisLevelSettings.findPeople[0])}}>
-				<img src={props.thisLevelSettings.findPeoplePics[0]} className="people-pic-drop-down"></img>
+				<img src={props.thisLevelSettings.findPeoplePics[0]} className="people-pic-drop-down" alt="option for selection"></img>
 				<div className="people-label-drop-down">{props.thisLevelSettings.findPeople[0]}</div>
 			</div>
 			<div className="people-drop-down-container" onClick={()=>{validateSelection(props.thisLevelSettings.findPeople[1])}}>
-				<img src={props.thisLevelSettings.findPeoplePics[1]} className="people-pic-drop-down"></img>
+				<img src={props.thisLevelSettings.findPeoplePics[1]} className="people-pic-drop-down" alt="option for selection"></img>
 				<div className="people-label-drop-down">{props.thisLevelSettings.findPeople[1]}</div>
 			</div>
 			<div className="people-drop-down-container" onClick={()=>{validateSelection(props.thisLevelSettings.findPeople[2])}}>
-				<img src={props.thisLevelSettings.findPeoplePics[2]} className="people-pic-drop-down"></img>
+				<img src={props.thisLevelSettings.findPeoplePics[2]} className="people-pic-drop-down" alt="option for selection"></img>
 				<div className="people-label-drop-down">{props.thisLevelSettings.findPeople[2]}</div>
 			</div>
 		</div>

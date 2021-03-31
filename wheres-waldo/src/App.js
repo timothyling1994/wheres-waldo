@@ -39,7 +39,6 @@ function App() {
     "PRINCESS MONONOKE":[207,215]
   }
 
-
   const [currentLevel,setCurrentLevel] = useState(0);
 
   const setLevel = (level) => {

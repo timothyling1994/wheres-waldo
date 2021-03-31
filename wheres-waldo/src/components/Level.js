@@ -5,21 +5,17 @@ import DropDown from "./DropDown.js";
 
 function Level(props){
 
+
 	const [scrolled,setScrolled] = useState(false);
 	const [currentClick,setCurrentClick] = useState([]);
+	const [currentRect,setCurrentRect] = useState();
 	const [showSelectionDropDown,setShowSelectionDropDown] = useState(false);
 	const thisLevelSettings = props.levelSettings[props.getLevel()];
+	const currentLevel = props.getLevel();
 
 	const drawRect = (target) => { 
-		let elementList = document.querySelectorAll(".rectBox");
 
-		elementList.forEach(element=>{
-			if(!element.classList.contains("found"))
-			{
-				document.body.removeChild(element);
-			}
-		});
-
+		clearNotFoundRect(); 
 
 		if(target.pageX-50>=0 && target.pageY-50>=0)
 		{
@@ -29,8 +25,31 @@ function Level(props){
 			rectBox.style.top=(target.pageY-50)+'px';
 			document.body.appendChild(rectBox);
 
+			setCurrentRect(rectBox);
 			showSelectionModal(target.pageX,target.pageY);
 		}
+	};
+
+	const clearNotFoundRect = () => {
+		let elementList = document.querySelectorAll(".rectBox");
+
+		elementList.forEach(element=>{
+			if(!element.classList.contains("found"))
+			{
+				document.body.removeChild(element);
+			}
+		});
+	};
+
+	const clearAllRects = () => {
+		console.log("clear");
+		let elementList = document.querySelectorAll(".rectBox");
+
+		elementList.forEach(element=>{
+			
+			document.body.removeChild(element);
+			
+		});
 	};
 
 	const showSelectionModal = (clickXCoord,clickYCoord) => {
@@ -39,7 +58,21 @@ function Level(props){
 		setShowSelectionDropDown(true);
 	};
 
+	const toggleDropDown = (value) => {
+		setShowSelectionDropDown(value);
+	}
+
+	const getCurrentRect = () =>{
+		return currentRect;
+	};
+
 	const isCorrectSelection = (xCoord,yCoord,people_label) => {
+
+		console.log("current:"+xCoord);
+		console.log("current:"+yCoord);
+		console.log(people_label);
+		console.log("solution:"+props.solution[people_label][0]);
+		console.log("solution:"+props.solution[people_label][1]);
 
 		if((xCoord >= ((props.solution[people_label][0])-60) && xCoord <= ((props.solution[people_label][0])+60)) && (yCoord >= ((props.solution[people_label][1])-60) && yCoord <= ((props.solution[people_label][1])+60)))
 		{
@@ -72,8 +105,11 @@ function Level(props){
 	useEffect(()=>{
 		window.addEventListener('scroll',handleScroll);
 
-		return () => window.removeEventListener("scroll", handleScroll);
-	});
+		return () => {
+			window.removeEventListener("scroll", handleScroll)
+			clearAllRects();
+		};
+	},[currentLevel]);
 
 	let findPeopleBar = ['find-people-container'];
 
@@ -88,26 +124,26 @@ function Level(props){
 			<div className={findPeopleBar.join(" ")}>
 				<div className="people">
 					<div className="people-img-container">
-						<img className="people-img" src={thisLevelSettings.findPeoplePics[0]}></img>
+						<img className="people-img" src={thisLevelSettings.findPeoplePics[0]} alt="find this person"></img>
 					</div>
 					<div className="people-label">{thisLevelSettings.findPeople[0]}</div>
 				</div>
 				<div className="people">
 					<div className="people-img-container">
-						<img className="people-img" src={thisLevelSettings.findPeoplePics[1]}></img>
+						<img className="people-img" src={thisLevelSettings.findPeoplePics[1]} alt="find this person"></img>
 					</div>
 					<div className="people-label">{thisLevelSettings.findPeople[1]}</div>
 				</div>
 				<div className="people">
 					<div className="people-img-container">
-						<img className="people-img" src={thisLevelSettings.findPeoplePics[2]}></img>
+						<img className="people-img" src={thisLevelSettings.findPeoplePics[2]} alt="find this person"></img>
 					</div>
 					<div className="people-label">{thisLevelSettings.findPeople[2]}</div>
 				</div>
 			</div>
 			<div className="main-img-container">
-				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} currentClick={currentClick} isCorrectSelection={isCorrectSelection}/> : null}
-				<img onClick={(target)=>{drawRect(target)}} className="main-img" src={thisLevelSettings.imgSrc}></img>
+				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} currentClick={currentClick} isCorrectSelection={isCorrectSelection} toggleDropDown={toggleDropDown} getCurrentRect={getCurrentRect} clearNotFoundRect={clearNotFoundRect}/> : null}
+				<img onClick={(target)=>{drawRect(target)}} className="main-img" src={thisLevelSettings.imgSrc} alt="main level"></img>
 			</div>
 		</div>
 	);
