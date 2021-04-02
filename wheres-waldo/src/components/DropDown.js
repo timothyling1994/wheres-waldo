@@ -30,7 +30,7 @@ function DropDown(props){
 			rect.classList.add("found");
 			rect.classList.add("correct");
 			setTimeout(function(){
-				props.clearNotFoundRect();
+				props.clearInvalidRect();
 				props.toggleDropDown(false);
 			},1000);
 		}
@@ -40,13 +40,12 @@ function DropDown(props){
 			rect.style.borderColor="red";
 			rect.classList.add("shake");
 			setTimeout(function(){
-				props.clearNotFoundRect();
+				props.clearInvalidRect();
 				props.toggleDropDown(false);
 			},1000);
 		}
 
 	};
-
 
 	return(	
 		

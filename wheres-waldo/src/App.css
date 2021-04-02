@@ -56,7 +56,7 @@ html,body{
 
 .Card img{
   width:30vw;
-  height:35vh;
+  height:40vh;
 }
 .card-description{
   display:flex;
@@ -138,8 +138,11 @@ html,body{
 }
 
 .main-img{
-  height:1920px;
-  width:1280px;
+  /*height:1920px;
+  width:1280px;*/
+  width:85vw;
+  height:auto;
+
 }
 
 .sticky {
