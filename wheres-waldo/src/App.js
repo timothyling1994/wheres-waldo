@@ -31,7 +31,7 @@ function App() {
   const solution = {
     "SARAH CONNER":[163,1103],
     "MORPHEUS":[760,1759],
-    "SONNY":[369,317],
+    "SONNY":[261,224],
     "JASON VOORHEES":[137,741],
     "PICKLE RICK":[52,1976],
     "CHUCKY":[64,569],

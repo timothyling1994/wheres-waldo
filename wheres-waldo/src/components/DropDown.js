@@ -23,6 +23,7 @@ function DropDown(props){
 
 	const validateSelection = (people_label) => {
 
+		/*
 		let result = props.isCorrectSelection(props.currentClick[0],props.currentClick[1],people_label);
 		if(result)
 		{
@@ -43,7 +44,7 @@ function DropDown(props){
 				props.clearInvalidRect();
 				props.toggleDropDown(false);
 			},1000);
-		}
+		}*/
 
 	};
 

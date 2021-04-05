@@ -8,54 +8,46 @@ function Level(props){
 	const [scrolled,setScrolled] = useState(false);
 	const [currentClick,setCurrentClick] = useState([]);
 	const [currentRect,setCurrentRect] = useState();
+	const [selections,setSelections] = useState([]);
 	const [showSelectionDropDown,setShowSelectionDropDown] = useState(false);
 	const thisLevelSettings = props.levelSettings[props.getLevel()];
 	const currentLevel = props.getLevel();
 
 	//solution is standardized to this width and height
-	const initWidth = 1218;
+	const initWidth = 1355;
 	const initHeight = 946;
 
 	const [viewPortWidth,setViewPortWidth] = useState(Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0));
 	const [viewPortHeight,setViewPortHeight] = useState(Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0));
 
-	
+	const [mainImageOffset,setMainImageOffset] = useState([]);
 
 	const drawRect = (target) => { 
 
 		clearInvalidRect(); 
 
-		console.log("VW+VH="+viewPortWidth + " " + viewPortHeight);
+		let mainImageContainer = target.target.getBoundingClientRect();
 
-		let currentRect = target.target.getBoundingClientRect();
+		setMainImageOffset([mainImageContainer.left, mainImageContainer.top]);
+
+		console.log("VW+VH="+viewPortWidth + " " + viewPortHeight);
 		
 		//relative to main image container
-		let x = target.pageX - currentRect.left;
-		let y = target.pageY - currentRect.top;
-
-		console.log(target);
-		console.log("x:"+x);
-		console.log("y:"+y);
-		console.log("offsetx:"+currentRect.left);
-		console.log("offsety:"+currentRect.top);
-		console.log("pageX:"+target.pageX);
-		console.log("pageY:"+target.pageY);
-		console.log("window.innerWidth:"+window.innerWidth);
-
-
+		let x = target.pageX - mainImageContainer.left;
+		let y = target.pageY - mainImageContainer.top;
 
 		if(x-50>=0 && y-50>=0)
 		{
-			let rectBox = document.createElement("div");
-			rectBox.classList.add("rectBox");
-			//rectBox.style.left=(target.pageX-50)+'px';
-			rectBox.style.left=xCoord+'%';
-			rectBox.style.top=yCoord+'%';
-			//rectBox.style.top=(target.pageY-50)+'px';
-			document.body.appendChild(rectBox);
 
-			setCurrentRect(rectBox);
-			setCurrentClick([target.pageX,target.pageY]);
+			console.log(x,y);
+			let arrayCopy = [...selections];
+			arrayCopy.push([x,y]);
+			console.log("arrayCopy"+arrayCopy);
+			setSelections(arrayCopy);
+
+	
+			//setCurrentRect(rectBox);
+			setCurrentClick([x,y]);
 			setShowSelectionDropDown(true);
 		}
 	};
@@ -66,17 +58,20 @@ function Level(props){
 		elementList.forEach(element=>{
 			if(!element.classList.contains("found"))
 			{
-				document.body.removeChild(element);
+				let parentNode = element.parentNode;
+				parentNode.removeChild(element);
 			}
 		});
 	};
 	const clearDropDown = () => {
 	
 		let dropDown = document.querySelector(".DropDown");
+
 		console.log(dropDown);
 		if(dropDown!==null)
 		{
-			document.body.removeChild(dropDown);
+			let parentNode = document.querySelector(".DropDown").parentNode;
+			parentNode.removeChild(dropDown);
 		}
 	};
 
@@ -86,7 +81,8 @@ function Level(props){
 
 		elementList.forEach(element=>{
 			
-			document.body.removeChild(element);
+			let parentNode = element.parentNode;
+			parentNode.removeChild(element);
 			
 		});
 	};
@@ -112,10 +108,23 @@ function Level(props){
 	};
 
 	const windowResize = () => {
-		//console.log(currentClick);
-		console.log("width:"+Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0));
-		console.log("height:"+Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0));
+		
+		let resizedWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+		let resizedHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
 
+		let scaledXCoord = (1-(initWidth-resizedWidth)/initWidth)*props.solution["SONNY"][0];
+		let scaledYCoord = (1-(initWidth-resizedWidth)/initWidth)*props.solution["SONNY"][1];
+
+		console.log("scaled:"+scaledXCoord,scaledYCoord);
+
+		setSelections([[scaledXCoord,scaledYCoord]]);
+
+		let mainImageContainer = document.querySelector(".main-img").getBoundingClientRect();
+		setMainImageOffset([mainImageContainer.left,mainImageContainer.top]);
+
+		//let mainImageContainer = target.target.getBoundingClientRect();
+
+		//setMainImageOffset([mainImageContainer.left, mainImageContainer.top]);
 	};
 
 	const handleScroll = () => {
@@ -137,14 +146,14 @@ function Level(props){
 
 	};
 
-	/*
+	
 	useEffect(()=>{
 		window.addEventListener('resize',windowResize);
 
 		return () => {
 			window.removeEventListener('resize',windowResize);
 		};
-	},[currentClick])*/
+	});
 
 	useEffect(()=>{
 		window.addEventListener('scroll',handleScroll);
@@ -188,6 +197,11 @@ function Level(props){
 				</div>
 			</div>
 			<div className="main-img-container">
+				{selections.map((value,index)=> {
+					console.log("diff:"+value[0]);
+					console.log("diff:"+value[1]);
+					return <div className="rectBox" style={{left:mainImageOffset[0]+value[0]-50+'px',top:mainImageOffset[1]+value[1]-50+'px'}}></div>
+				})}
 				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} currentClick={currentClick} isCorrectSelection={isCorrectSelection} toggleDropDown={toggleDropDown} getCurrentRect={getCurrentRect} clearInvalidRect={clearInvalidRect}/> : null}
 				<img onClick={(target)=>{drawRect(target)}} className="main-img" src={thisLevelSettings.imgSrc} alt="main level"></img>
 			</div>
