@@ -2,49 +2,48 @@ import React from "react";
 
 function DropDown(props){
 
-	let xCoord;
-	let yCoord = props.currentClick[1];
+	console.log("HERE:"+props.currentSelection);
 
-	if(props.currentClick[0]>1000)
-	{
-		let vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-		xCoord = props.currentClick[0]-(vw*0.15)-50;
-	}
-	else
-	{
-		xCoord = props.currentClick[0]+53;
-	}
+	let xCoord = props.currentSelection[0][0];
+	let yCoord = props.currentSelection[0][1];
 
 	const myStyle = {
 		position:'absolute',
-		left: xCoord+'px',
-		top: yCoord+'px'
+		left: xCoord+props.mainImageOffset[0]+58 + 'px',
+		top: yCoord+props.mainImageOffset[1]+'px'
 	};	
 
 	const validateSelection = (people_label) => {
 
-		/*
-		let result = props.isCorrectSelection(props.currentClick[0],props.currentClick[1],people_label);
+	
+		let result = props.isCorrectSelection(people_label);
 		if(result)
 		{
-			let rect = props.getCurrentRect();
-			rect.classList.add("found");
-			rect.classList.add("correct");
-			setTimeout(function(){
-				props.clearInvalidRect();
-				props.toggleDropDown(false);
-			},1000);
+			let copyArr = [...props.foundObjects];
+			copyArr.push([xCoord,yCoord]);
+			props.setFoundObjects(copyArr);
+			props.toggleDropDown(false);
+			props.setCurrentSelection([]);
 		}
 		else
 		{
-			let rect = props.getCurrentRect();
-			rect.style.borderColor="red";
-			rect.classList.add("shake");
+			let currentRect = document.querySelector(".currentSelection");
+			console.log(currentRect);
+			currentRect.style.borderColor="red";
+			currentRect.classList.add("shake");
 			setTimeout(function(){
-				props.clearInvalidRect();
 				props.toggleDropDown(false);
+				props.setCurrentSelection([]);
 			},1000);
-		}*/
+			//let rect = props.getCurrentRect();
+			//rect.style.borderColor="red";
+			//rect.classList.add("shake");
+			/*setTimeout(function(){
+				props.toggleDropDown(false);
+			},1000);*/
+		}
+
+		
 
 	};
 

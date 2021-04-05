@@ -29,8 +29,8 @@ function App() {
 
   //relative solution
   const solution = {
-    "SARAH CONNER":[163,1103],
-    "MORPHEUS":[760,1759],
+    "SARAH CONNER":[271,833],
+    "MORPHEUS":[810,1421],
     "SONNY":[261,224],
     "JASON VOORHEES":[137,741],
     "PICKLE RICK":[52,1976],

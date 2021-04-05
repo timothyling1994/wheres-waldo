@@ -9,38 +9,57 @@ function Level(props){
 	const [currentClick,setCurrentClick] = useState([]);
 	const [currentRect,setCurrentRect] = useState();
 	const [currentSelection,setCurrentSelection] = useState([]);
+	const [foundObjects,setFoundObjects] = useState([]);
 	const [selectionBeforeResize,setSelectionBeforeResize] = useState([]);
 	const [showSelectionDropDown,setShowSelectionDropDown] = useState(false);
 	const thisLevelSettings = props.levelSettings[props.getLevel()];
 	const currentLevel = props.getLevel();
+	let finalSolutionObj;
 
 	//solution is standardized to this width and height
 	const initWidth = 1355;
 	const initHeight = 946;
 
-	const [viewPortWidth,setViewPortWidth] = useState(Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0));
-	const [viewPortHeight,setViewPortHeight] = useState(Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0));
-
 	const [mainImageOffset,setMainImageOffset] = useState([]);
 
+
+	const standardizedSolution = () => {
+
+		finalSolutionObj = Object.assign({},props.solution);
+		console.log(props.solution);
+
+		for (const property in finalSolutionObj)
+		{
+
+			let currentWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+			let currentHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+
+			console.log(currentWidth);
+			console.log(currentHeight);
+
+			let scaledXCoord = (1-(initWidth-currentWidth)/initWidth)*finalSolutionObj[property][0];
+			let scaledYCoord = (1-(initWidth-currentWidth)/initWidth)*finalSolutionObj[property][1];
+
+			finalSolutionObj[property]=[scaledXCoord,scaledYCoord];
+		}
+		console.log(finalSolutionObj);
+	};
+
+	standardizedSolution();
+
 	const drawRect = (target) => { 
-
-		//clearInvalidRect(); 
-
 
 		let mainImageContainer = target.target.getBoundingClientRect();
 		let offsetYScrolled = mainImageContainer.top - document.body.getBoundingClientRect().top;
 
-		console.log("mainImageContainer.top:"+mainImageContainer.top);
-		console.log("body.top:"+document.body.getBoundingClientRect().top);
-		console.log(offsetYScrolled);
 		setMainImageOffset([mainImageContainer.left, offsetYScrolled]);
 		
 		//relative to main image container
 
-
 		let x = target.pageX - mainImageContainer.left;
 		let y = target.pageY - offsetYScrolled;
+
+		console.log(x,y);
 
 		if(x-50>=0 && y-50>=0)
 		{
@@ -57,24 +76,11 @@ function Level(props){
 		}
 	};
 
-	
-	const clearInvalidRect = () => {
-		let elementList = document.querySelectorAll(".rectBox");
-
-		elementList.forEach(element=>{
-			if(!element.classList.contains("found"))
-			{
-				let parentNode = element.parentNode;
-				parentNode.removeChild(element);
-			}
-		});
-	};
 
 	const clearDropDown = () => {
 	
 		let dropDown = document.querySelector(".DropDown");
 
-		console.log(dropDown);
 		if(dropDown!==null)
 		{
 			let parentNode = document.querySelector(".DropDown").parentNode;
@@ -83,7 +89,7 @@ function Level(props){
 	};
 
 	const clearAllRects = () => {
-		console.log("clear");
+
 		let elementList = document.querySelectorAll(".rectBox");
 
 		elementList.forEach(element=>{
@@ -102,9 +108,9 @@ function Level(props){
 		return currentRect;
 	};
 
-	const isCorrectSelection = (xCoord,yCoord,people_label) => {
+	const isCorrectSelection = (people_label) => {
 
-		if((xCoord >= ((props.solution[people_label][0])-60) && xCoord <= ((props.solution[people_label][0])+60)) && (yCoord >= ((props.solution[people_label][1])-60) && yCoord <= ((props.solution[people_label][1])+60)))
+		if((currentSelection[0][0] >= ((finalSolutionObj[people_label][0])-60) && currentSelection[0][0] <= ((finalSolutionObj[people_label][0])+60)) && (currentSelection[0][1] >= ((finalSolutionObj[people_label][1])-60) && currentSelection[0][1] <= ((finalSolutionObj[people_label][1])+60)))
 		{
 			console.log(true);
 			return true;
@@ -119,17 +125,12 @@ function Level(props){
 		let resizedWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
 		let resizedHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
 
-		console.log("current");
-		console.log(currentSelection);
 		let scaledXCoord = (1-(initWidth-resizedWidth)/initWidth)*selectionBeforeResize[0][0];
 		let scaledYCoord = (1-(initWidth-resizedWidth)/initWidth)*selectionBeforeResize[0][1];
-
-		console.log("scaled:"+scaledXCoord,scaledYCoord);
 
 		setCurrentSelection([[scaledXCoord,scaledYCoord]]);
 
 		let mainImageContainer = document.querySelector(".main-img").getBoundingClientRect();
-
 		let offsetYScrolled = mainImageContainer.top - document.body.getBoundingClientRect().top;
 		setMainImageOffset([mainImageContainer.left,offsetYScrolled]);
 	};
@@ -204,10 +205,14 @@ function Level(props){
 				</div>
 			</div>
 			<div className="main-img-container">
-				{currentSelection.map((value,index)=> {
-					return <div className="rectBox" style={{left:mainImageOffset[0]+value[0]-50+'px',top:mainImageOffset[1]+value[1]-50+'px'}}></div>
+				{foundObjects.map((value,index)=> {
+					console.log("yeet:"+value);
+					return <div className="rectBox found correct"  style={{left:mainImageOffset[0]+value[0]-50+'px',top:mainImageOffset[1]+value[1]-50+'px'}}></div>
 				})}
-				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} currentClick={currentClick} isCorrectSelection={isCorrectSelection} toggleDropDown={toggleDropDown} getCurrentRect={getCurrentRect} clearInvalidRect={clearInvalidRect}/> : null}
+				{currentSelection.map((value,index)=> {
+					return <div className="rectBox currentSelection" style={{left:mainImageOffset[0]+value[0]-50+'px',top:mainImageOffset[1]+value[1]-50+'px'}}></div>
+				})}
+				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} currentSelection={currentSelection} setCurrentSelection={setCurrentSelection} isCorrectSelection={isCorrectSelection} toggleDropDown={toggleDropDown} getCurrentRect={getCurrentRect} mainImageOffset={mainImageOffset} foundObjects={foundObjects} setFoundObjects={setFoundObjects}/> : null}
 				<img onClick={(target)=>{drawRect(target)}} className="main-img" src={thisLevelSettings.imgSrc} alt="main level"></img>
 			</div>
 		</div>
