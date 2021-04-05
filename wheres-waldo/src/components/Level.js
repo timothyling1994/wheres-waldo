@@ -8,7 +8,8 @@ function Level(props){
 	const [scrolled,setScrolled] = useState(false);
 	const [currentClick,setCurrentClick] = useState([]);
 	const [currentRect,setCurrentRect] = useState();
-	const [selections,setSelections] = useState([]);
+	const [currentSelection,setCurrentSelection] = useState([]);
+	const [selectionBeforeResize,setSelectionBeforeResize] = useState([]);
 	const [showSelectionDropDown,setShowSelectionDropDown] = useState(false);
 	const thisLevelSettings = props.levelSettings[props.getLevel()];
 	const currentLevel = props.getLevel();
@@ -24,26 +25,30 @@ function Level(props){
 
 	const drawRect = (target) => { 
 
-		clearInvalidRect(); 
+		//clearInvalidRect(); 
+
 
 		let mainImageContainer = target.target.getBoundingClientRect();
+		let offsetYScrolled = mainImageContainer.top - document.body.getBoundingClientRect().top;
 
-		setMainImageOffset([mainImageContainer.left, mainImageContainer.top]);
-
-		console.log("VW+VH="+viewPortWidth + " " + viewPortHeight);
+		console.log("mainImageContainer.top:"+mainImageContainer.top);
+		console.log("body.top:"+document.body.getBoundingClientRect().top);
+		console.log(offsetYScrolled);
+		setMainImageOffset([mainImageContainer.left, offsetYScrolled]);
 		
 		//relative to main image container
+
+
 		let x = target.pageX - mainImageContainer.left;
-		let y = target.pageY - mainImageContainer.top;
+		let y = target.pageY - offsetYScrolled;
 
 		if(x-50>=0 && y-50>=0)
 		{
 
-			console.log(x,y);
-			let arrayCopy = [...selections];
-			arrayCopy.push([x,y]);
-			console.log("arrayCopy"+arrayCopy);
-			setSelections(arrayCopy);
+			let currentCoords=[];
+			currentCoords.push([x,y]);
+			setCurrentSelection(currentCoords);
+			setSelectionBeforeResize(currentCoords);
 
 	
 			//setCurrentRect(rectBox);
@@ -52,6 +57,7 @@ function Level(props){
 		}
 	};
 
+	
 	const clearInvalidRect = () => {
 		let elementList = document.querySelectorAll(".rectBox");
 
@@ -63,6 +69,7 @@ function Level(props){
 			}
 		});
 	};
+
 	const clearDropDown = () => {
 	
 		let dropDown = document.querySelector(".DropDown");
@@ -112,19 +119,19 @@ function Level(props){
 		let resizedWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
 		let resizedHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
 
-		let scaledXCoord = (1-(initWidth-resizedWidth)/initWidth)*props.solution["SONNY"][0];
-		let scaledYCoord = (1-(initWidth-resizedWidth)/initWidth)*props.solution["SONNY"][1];
+		console.log("current");
+		console.log(currentSelection);
+		let scaledXCoord = (1-(initWidth-resizedWidth)/initWidth)*selectionBeforeResize[0][0];
+		let scaledYCoord = (1-(initWidth-resizedWidth)/initWidth)*selectionBeforeResize[0][1];
 
 		console.log("scaled:"+scaledXCoord,scaledYCoord);
 
-		setSelections([[scaledXCoord,scaledYCoord]]);
+		setCurrentSelection([[scaledXCoord,scaledYCoord]]);
 
 		let mainImageContainer = document.querySelector(".main-img").getBoundingClientRect();
-		setMainImageOffset([mainImageContainer.left,mainImageContainer.top]);
 
-		//let mainImageContainer = target.target.getBoundingClientRect();
-
-		//setMainImageOffset([mainImageContainer.left, mainImageContainer.top]);
+		let offsetYScrolled = mainImageContainer.top - document.body.getBoundingClientRect().top;
+		setMainImageOffset([mainImageContainer.left,offsetYScrolled]);
 	};
 
 	const handleScroll = () => {
@@ -197,9 +204,7 @@ function Level(props){
 				</div>
 			</div>
 			<div className="main-img-container">
-				{selections.map((value,index)=> {
-					console.log("diff:"+value[0]);
-					console.log("diff:"+value[1]);
+				{currentSelection.map((value,index)=> {
 					return <div className="rectBox" style={{left:mainImageOffset[0]+value[0]-50+'px',top:mainImageOffset[1]+value[1]-50+'px'}}></div>
 				})}
 				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} currentClick={currentClick} isCorrectSelection={isCorrectSelection} toggleDropDown={toggleDropDown} getCurrentRect={getCurrentRect} clearInvalidRect={clearInvalidRect}/> : null}
