@@ -2,8 +2,6 @@ import React from "react";
 
 function DropDown(props){
 
-	console.log("HERE:"+props.currentSelection);
-
 	let xCoord = props.currentSelection[0][0];
 	let yCoord = props.currentSelection[0][1];
 
@@ -15,7 +13,6 @@ function DropDown(props){
 
 	const validateSelection = (people_label) => {
 
-	
 		let result = props.isCorrectSelection(people_label);
 		if(result)
 		{
@@ -23,7 +20,9 @@ function DropDown(props){
 			copyArr.push([xCoord,yCoord]);
 			props.setFoundObjects(copyArr);
 			props.toggleDropDown(false);
+			props.setSelectionBeforeResize([]);
 			props.setCurrentSelection([]);
+
 		}
 		else
 		{
@@ -35,16 +34,7 @@ function DropDown(props){
 				props.toggleDropDown(false);
 				props.setCurrentSelection([]);
 			},1000);
-			//let rect = props.getCurrentRect();
-			//rect.style.borderColor="red";
-			//rect.classList.add("shake");
-			/*setTimeout(function(){
-				props.toggleDropDown(false);
-			},1000);*/
 		}
-
-		
-
 	};
 
 	return(	
