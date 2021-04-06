@@ -12,6 +12,9 @@ function Level(props){
 
 	const [widthBeforeResize,setWidthBeforeResize] = useState([]);
 
+	const [findPeopleAttributes,setFindPeopleAttributes] = useState(['find-people-container']);
+	const [peopleImgAttributes,setPeopleImgAttributes] = useState([['people-img'],['people-img'],['people-img']]);
+
 	const [showSelectionDropDown,setShowSelectionDropDown] = useState(false);
 	const thisLevelSettings = props.levelSettings[props.getLevel()];
 	const currentLevel = props.getLevel();
@@ -21,7 +24,6 @@ function Level(props){
 	const initWidth = 1355;
 	const initHeight = 946;
 	const [mainImageOffset,setMainImageOffset] = useState([]);
-
 
 	const standardizedSolution = () => {
 
@@ -44,6 +46,13 @@ function Level(props){
 		let currentWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
 		setWidthBeforeResize([currentWidth]);
 		standardizedSolution();
+	};
+
+	const markFound = (index) => {
+
+		let copyArr = [...peopleImgAttributes];
+		copyArr[index].push("person-found");
+		setPeopleImgAttributes(copyArr);
 	};
 
 	const drawRect = (target) => { 
@@ -158,12 +167,14 @@ function Level(props){
 		if(offset>50)
 		{
 			setScrolled(true);
+			setFindPeopleAttributes(['find-people-container','sticky']);
 			main_img.classList.add("shift-main-image");
 
 		}
 		else
 		{
 			setScrolled(false);
+			setFindPeopleAttributes(['find-people-container']);
 			main_img.classList.remove("shift-main-image");
 		}
 
@@ -192,32 +203,25 @@ function Level(props){
 		};
 	},[currentLevel]);
 
-	let findPeopleBar = ['find-people-container'];
-
-	if(scrolled)
-	{
-		findPeopleBar.push('sticky');
-	}
-
 	return(
 		<div className="Level">
 			<Link to={"/"} className="link"><div className="header">WHERE'S WALDO</div></Link>
-			<div className={findPeopleBar.join(" ")}>
+			<div className={findPeopleAttributes.join(" ")}>
 				<div className="people">
 					<div className="people-img-container">
-						<img className="people-img" src={thisLevelSettings.findPeoplePics[0]} alt="find this person"></img>
+						<img className={peopleImgAttributes[0].join(" ")} src={thisLevelSettings.findPeoplePics[0]} alt="find this person"></img>
 					</div>
 					<div className="people-label">{thisLevelSettings.findPeople[0]}</div>
 				</div>
 				<div className="people">
 					<div className="people-img-container">
-						<img className="people-img" src={thisLevelSettings.findPeoplePics[1]} alt="find this person"></img>
+						<img className={peopleImgAttributes[1].join(" ")} src={thisLevelSettings.findPeoplePics[1]} alt="find this person"></img>
 					</div>
 					<div className="people-label">{thisLevelSettings.findPeople[1]}</div>
 				</div>
 				<div className="people">
 					<div className="people-img-container">
-						<img className="people-img" src={thisLevelSettings.findPeoplePics[2]} alt="find this person"></img>
+						<img className={peopleImgAttributes[2].join(" ")} src={thisLevelSettings.findPeoplePics[2]} alt="find this person"></img>
 					</div>
 					<div className="people-label">{thisLevelSettings.findPeople[2]}</div>
 				</div>
@@ -229,7 +233,7 @@ function Level(props){
 				{currentSelection.map((value,index)=> {
 					return <div className="rectBox currentSelection" style={{left:mainImageOffset[0]+value[0]-50+'px',top:mainImageOffset[1]+value[1]-50+'px',borderRadius:'50%'}}></div>
 				})}
-				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} currentSelection={currentSelection} setCurrentSelection={setCurrentSelection} isCorrectSelection={isCorrectSelection} toggleDropDown={toggleDropDown} mainImageOffset={mainImageOffset} foundObjects={foundObjects} setFoundObjects={setFoundObjects} setSelectionBeforeResize={setSelectionBeforeResize}/> : null}
+				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} currentSelection={currentSelection} setCurrentSelection={setCurrentSelection} isCorrectSelection={isCorrectSelection} toggleDropDown={toggleDropDown} mainImageOffset={mainImageOffset} foundObjects={foundObjects} setFoundObjects={setFoundObjects} setSelectionBeforeResize={setSelectionBeforeResize} markFound={markFound}/> : null}
 				<img onClick={(target)=>{drawRect(target)}} className="main-img" src={thisLevelSettings.imgSrc} alt="main level"></img>
 			</div>
 		</div>

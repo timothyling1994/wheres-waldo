@@ -11,7 +11,7 @@ function DropDown(props){
 		top: yCoord+props.mainImageOffset[1]+'px'
 	};	
 
-	const validateSelection = (people_label) => {
+	const validateSelection = (people_label,index) => {
 
 		let result = props.isCorrectSelection(people_label);
 		if(result)
@@ -19,6 +19,7 @@ function DropDown(props){
 			let copyArr = [...props.foundObjects];
 			copyArr.push([xCoord,yCoord]);
 			props.setFoundObjects(copyArr);
+			props.markFound(index);
 			props.toggleDropDown(false);
 			props.setSelectionBeforeResize([]);
 			props.setCurrentSelection([]);
@@ -40,15 +41,15 @@ function DropDown(props){
 	return(	
 		
 		<div className="DropDown" style={myStyle}>
-			<div className="people-drop-down-container" onClick={()=>{validateSelection(props.thisLevelSettings.findPeople[0])}}>
+			<div className="people-drop-down-container" onClick={()=>{validateSelection(props.thisLevelSettings.findPeople[0],0)}}>
 				<img src={props.thisLevelSettings.findPeoplePics[0]} className="people-pic-drop-down" alt="option for selection"></img>
 				<div className="people-label-drop-down">{props.thisLevelSettings.findPeople[0]}</div>
 			</div>
-			<div className="people-drop-down-container" onClick={()=>{validateSelection(props.thisLevelSettings.findPeople[1])}}>
+			<div className="people-drop-down-container" onClick={()=>{validateSelection(props.thisLevelSettings.findPeople[1],1)}}>
 				<img src={props.thisLevelSettings.findPeoplePics[1]} className="people-pic-drop-down" alt="option for selection"></img>
 				<div className="people-label-drop-down">{props.thisLevelSettings.findPeople[1]}</div>
 			</div>
-			<div className="people-drop-down-container" onClick={()=>{validateSelection(props.thisLevelSettings.findPeople[2])}}>
+			<div className="people-drop-down-container" onClick={()=>{validateSelection(props.thisLevelSettings.findPeople[2],2)}}>
 				<img src={props.thisLevelSettings.findPeoplePics[2]} className="people-pic-drop-down" alt="option for selection"></img>
 				<div className="people-label-drop-down">{props.thisLevelSettings.findPeople[2]}</div>
 			</div>
