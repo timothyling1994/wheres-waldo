@@ -32,12 +32,12 @@ function App() {
     "SARAH CONNER":[271,833],
     "MORPHEUS":[810,1421],
     "SONNY":[261,224],
-    "JASON VOORHEES":[137,741],
-    "PICKLE RICK":[52,1976],
-    "CHUCKY":[64,569],
-    "TETSUO":[887,226],
-    "BLADE":[195,713],
-    "PRINCESS MONONOKE":[207,215]
+    "JASON VOORHEES":[242,508],
+    "PICKLE RICK":[85,1599],
+    "CHUCKY":[93,334],
+    "TETSUO":[931,41],
+    "BLADE":[315,482],
+    "PRINCESS MONONOKE":[325,33]
   }
 
   const [currentLevel,setCurrentLevel] = useState(0);

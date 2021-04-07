@@ -2,13 +2,12 @@ import React from "react";
 import {useState,useEffect} from "react";
 import { Link } from "react-router-dom";
 import DropDown from "./DropDown.js";
+import firebase from "firebase";
 
 function Level(props){
 
-	const [scrolled,setScrolled] = useState(false);
 	const [currentSelection,setCurrentSelection] = useState([]);
 	const [foundObjects,setFoundObjects] = useState([]);
-	const [selectionBeforeResize,setSelectionBeforeResize] = useState([]);
 
 	const [widthBeforeResize,setWidthBeforeResize] = useState([]);
 
@@ -18,6 +17,7 @@ function Level(props){
 	const [showSelectionDropDown,setShowSelectionDropDown] = useState(false);
 	const thisLevelSettings = props.levelSettings[props.getLevel()];
 	const currentLevel = props.getLevel();
+	const [initSolutionObj,setInitSolutionObj] = useState({});
 	const [finalSolutionObj,setFinalSolutionObj] = useState({});
 
 	//solution is standardized to this width and height
@@ -27,7 +27,9 @@ function Level(props){
 
 	const standardizedSolution = () => {
 
-		let solutionObj = Object.assign({},props.solution);
+		//let solutionObj = Object.assign({},props.solution);
+		let solutionObj = Object.assign({},initSolutionObj);
+		console.log("init"+initSolutionObj);
 		for (const property in solutionObj)
 		{
 			let currentWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
@@ -37,15 +39,45 @@ function Level(props){
 			let scaledYCoord = (1-(initWidth-currentWidth)/initWidth)*solutionObj[property][1];
 
 			solutionObj[property]=[scaledXCoord,scaledYCoord];
-			console.log(scaledXCoord,scaledYCoord);
 		}
 		setFinalSolutionObj(solutionObj);
 	};
 
-	const init = () => {
+	const init = async () => {
+
 		let currentWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
 		setWidthBeforeResize([currentWidth]);
-		standardizedSolution();
+
+		try
+		{
+			await callFireStore();
+		}
+		catch(err)
+		{
+			console.log('Error getting documents',err);
+		}
+	};
+
+	const callFireStore = async () => {
+		let solutionsRef = firebase.firestore().collection('solutions').doc('level'+(props.getLevel()+1));
+		
+		try
+		{
+			let docRef = await solutionsRef.get();
+			if(docRef.exists)
+			{
+				console.log("Document Data:",docRef.data());
+				setInitSolutionObj(docRef.data());
+			}
+			else
+			{
+				console.log("No such document!");
+			}
+		}
+		catch (error)
+		{
+			console.log("Error getting document:",error);
+		}
 	};
 
 	const markFound = (index) => {
@@ -55,7 +87,7 @@ function Level(props){
 		setPeopleImgAttributes(copyArr);
 	};
 
-	const drawRect = (target) => { 
+	const drawCircle = (target) => { 
 
 		let mainImageContainer = target.target.getBoundingClientRect();
 		let offsetYScrolled = mainImageContainer.top - document.body.getBoundingClientRect().top;
@@ -67,13 +99,14 @@ function Level(props){
 		let x = target.pageX - mainImageContainer.left;
 		let y = target.pageY - offsetYScrolled;
 
-		if(x-50>=0 && y-50>=0)
+		console.log(x,y);
+
+		if(x-20>=0 && y-20>=0)
 		{
 
 			let currentCoords=[];
 			currentCoords.push([x,y]);
 			setCurrentSelection(currentCoords);
-			setSelectionBeforeResize(currentCoords);
 			setShowSelectionDropDown(true);
 		}
 	};
@@ -107,11 +140,6 @@ function Level(props){
 	}
 
 	const isCorrectSelection = (people_label) => {
-
-		console.log("selection x:"+currentSelection[0][0]);
-		console.log("selection x:"+currentSelection[0][1]);
-		console.log("solution x:"+finalSolutionObj[people_label][0]);
-		console.log("solution y:"+finalSolutionObj[people_label][1]);
 
 		if((currentSelection[0][0] >= ((finalSolutionObj[people_label][0])-60) && currentSelection[0][0] <= ((finalSolutionObj[people_label][0])+60)) && (currentSelection[0][1] >= ((finalSolutionObj[people_label][1])-60) && currentSelection[0][1] <= ((finalSolutionObj[people_label][1])+60)))
 		{
@@ -166,19 +194,21 @@ function Level(props){
 
 		if(offset>50)
 		{
-			setScrolled(true);
 			setFindPeopleAttributes(['find-people-container','sticky']);
 			main_img.classList.add("shift-main-image");
 
 		}
 		else
 		{
-			setScrolled(false);
 			setFindPeopleAttributes(['find-people-container']);
 			main_img.classList.remove("shift-main-image");
 		}
 
 	};
+
+	useEffect(()=>{
+		standardizedSolution();
+	},[initSolutionObj]);
 
 	useEffect(()=>{
 		init();
@@ -233,8 +263,8 @@ function Level(props){
 				{currentSelection.map((value,index)=> {
 					return <div className="rectBox currentSelection" style={{left:mainImageOffset[0]+value[0]-50+'px',top:mainImageOffset[1]+value[1]-50+'px',borderRadius:'50%'}}></div>
 				})}
-				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} currentSelection={currentSelection} setCurrentSelection={setCurrentSelection} isCorrectSelection={isCorrectSelection} toggleDropDown={toggleDropDown} mainImageOffset={mainImageOffset} foundObjects={foundObjects} setFoundObjects={setFoundObjects} setSelectionBeforeResize={setSelectionBeforeResize} markFound={markFound}/> : null}
-				<img onClick={(target)=>{drawRect(target)}} className="main-img" src={thisLevelSettings.imgSrc} alt="main level"></img>
+				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} currentSelection={currentSelection} setCurrentSelection={setCurrentSelection} isCorrectSelection={isCorrectSelection} toggleDropDown={toggleDropDown} mainImageOffset={mainImageOffset} foundObjects={foundObjects} setFoundObjects={setFoundObjects} markFound={markFound}/> : null}
+				<img onClick={(target)=>{drawCircle(target)}} className="main-img" src={thisLevelSettings.imgSrc} alt="main level"></img>
 			</div>
 		</div>
 	);

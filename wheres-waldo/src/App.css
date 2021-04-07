@@ -226,6 +226,6 @@ html,body{
 }
 
 .person-found{
-  background: green;
+  background: rgb(0,255,0,0.7);
   pointer-events: none;
 }

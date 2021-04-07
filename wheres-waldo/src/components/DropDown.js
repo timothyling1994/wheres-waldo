@@ -21,7 +21,6 @@ function DropDown(props){
 			props.setFoundObjects(copyArr);
 			props.markFound(index);
 			props.toggleDropDown(false);
-			props.setSelectionBeforeResize([]);
 			props.setCurrentSelection([]);
 
 		}
