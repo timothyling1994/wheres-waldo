@@ -2,6 +2,7 @@ import React from "react";
 import {useState,useEffect} from "react";
 import { Link } from "react-router-dom";
 import DropDown from "./DropDown.js";
+import GameOver from "./GameOver.js";
 import firebase from "firebase";
 
 function Level(props){
@@ -29,6 +30,9 @@ function Level(props){
 
 	const [startTimerId,setStartTimerId] = useState(0);
 	const [markCounter,setMarkCounter] = useState(0);
+	const [finalTime,setFinalTime] = useState(0);
+
+	const [gameOver,setGameOver] = useState(false);
 
 
 	const startTimer = () => {
@@ -61,6 +65,8 @@ function Level(props){
 					let end_time = new Date().getTime()/1000;
 
 					console.log(end_time-start_time);
+					setFinalTime(end_time-start_time);
+					setGameOver(true);
 
 				}
 				else
@@ -262,27 +268,18 @@ function Level(props){
 
 	};
 
-
-	useEffect(()=>{
-		isGameOver();
-	},[markCounter]);
-
-	useEffect(()=>{
-		standardizedSolution();
-	},[initSolutionObj]);
+	const toggleGameOverModal = (value) => {
+		setGameOver(value);
+	};
 
 	useEffect(()=>{
 		init();
 		startTimer();
 	},[]);
-	
-	useEffect(()=>{
-		window.addEventListener('resize',windowResize);
 
-		return () => {
-			window.removeEventListener('resize',windowResize);
-		};
-	});
+	useEffect(()=>{
+		standardizedSolution();
+	},[initSolutionObj]);
 
 	useEffect(()=>{
 		window.addEventListener('scroll',handleScroll);
@@ -295,9 +292,25 @@ function Level(props){
 		};
 	},[currentLevel]);
 
+	useEffect(()=>{
+		window.addEventListener('resize',windowResize);
+
+		return () => {
+			window.removeEventListener('resize',windowResize);
+		};
+	});
+
+
+	useEffect(()=>{
+		isGameOver();
+	},[markCounter]);
+	
 	return(
 		<div className="Level">
 			<Link to={"/"} className="link"><div className="header">WHERE'S WALDO</div></Link>
+			<div className="game-over-modal">
+				{gameOver ? <GameOver finalTime={finalTime} toggleGameOverModal={toggleGameOverModal}/> : null}
+			</div>
 			<div className={findPeopleAttributes.join(" ")}>
 				<div className="people">
 					<div className="people-img-container">
