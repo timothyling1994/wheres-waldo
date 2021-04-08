@@ -13,6 +13,8 @@ function Level(props){
 
 	const [findPeopleAttributes,setFindPeopleAttributes] = useState(['find-people-container']);
 	const [peopleImgAttributes,setPeopleImgAttributes] = useState([['people-img'],['people-img'],['people-img']]);
+	const [peopleDropDownAttributes,setPeopleDropDownAttributes] = useState([['people-drop-down-container'],['people-drop-down-container'],['people-drop-down-container']]);
+
 
 	const [showSelectionDropDown,setShowSelectionDropDown] = useState(false);
 	const thisLevelSettings = props.levelSettings[props.getLevel()];
@@ -85,6 +87,10 @@ function Level(props){
 		let copyArr = [...peopleImgAttributes];
 		copyArr[index].push("person-found");
 		setPeopleImgAttributes(copyArr);
+
+		let copyArr2 = [...peopleDropDownAttributes];
+		copyArr2[index].push("person-found-dropdown");
+		setPeopleDropDownAttributes(copyArr2);
 	};
 
 	const drawCircle = (target) => { 
@@ -123,7 +129,7 @@ function Level(props){
 		}
 	};
 
-	const clearAllRects = () => {
+	const clearAllCircles = () => {
 
 		let elementList = document.querySelectorAll(".rectBox");
 
@@ -229,7 +235,7 @@ function Level(props){
 		return () => {
 			window.removeEventListener("scroll", handleScroll)
 			clearDropDown();
-			clearAllRects();
+			clearAllCircles();
 		};
 	},[currentLevel]);
 
@@ -263,7 +269,7 @@ function Level(props){
 				{currentSelection.map((value,index)=> {
 					return <div className="rectBox currentSelection" style={{left:mainImageOffset[0]+value[0]-50+'px',top:mainImageOffset[1]+value[1]-50+'px',borderRadius:'50%'}}></div>
 				})}
-				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} currentSelection={currentSelection} setCurrentSelection={setCurrentSelection} isCorrectSelection={isCorrectSelection} toggleDropDown={toggleDropDown} mainImageOffset={mainImageOffset} foundObjects={foundObjects} setFoundObjects={setFoundObjects} markFound={markFound}/> : null}
+				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} currentSelection={currentSelection} setCurrentSelection={setCurrentSelection} isCorrectSelection={isCorrectSelection} toggleDropDown={toggleDropDown} mainImageOffset={mainImageOffset} foundObjects={foundObjects} setFoundObjects={setFoundObjects} markFound={markFound} peopleDropDownAttributes={peopleDropDownAttributes}/> : null}
 				<img onClick={(target)=>{drawCircle(target)}} className="main-img" src={thisLevelSettings.imgSrc} alt="main level"></img>
 			</div>
 		</div>

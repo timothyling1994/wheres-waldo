@@ -229,3 +229,8 @@ html,body{
   background: rgb(0,255,0,0.7);
   pointer-events: none;
 }
+
+.person-found-dropdown{
+  pointer-events: none;
+  opacity:0.4;
+}

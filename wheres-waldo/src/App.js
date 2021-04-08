@@ -27,19 +27,6 @@ function App() {
     }
   ]
 
-  //relative solution
-  const solution = {
-    "SARAH CONNER":[271,833],
-    "MORPHEUS":[810,1421],
-    "SONNY":[261,224],
-    "JASON VOORHEES":[242,508],
-    "PICKLE RICK":[85,1599],
-    "CHUCKY":[93,334],
-    "TETSUO":[931,41],
-    "BLADE":[315,482],
-    "PRINCESS MONONOKE":[325,33]
-  }
-
   const [currentLevel,setCurrentLevel] = useState(0);
 
   const setLevel = (level) => {
@@ -55,7 +42,7 @@ function App() {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" render={() => (<Home levelSettings={levelSettings} setLevel={setLevel} />)} />
-          <Route exact path="/game" render={(props) => (<Level levelSettings={levelSettings} getLevel={getLevel} solution={solution}/>)}/>
+          <Route exact path="/game" render={(props) => (<Level levelSettings={levelSettings} getLevel={getLevel}/>)}/>
           <Route exact path="/leaderboard" render={null} />
         </Switch>
       </BrowserRouter>
