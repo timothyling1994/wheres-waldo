@@ -27,11 +27,60 @@ function Level(props){
 	const initHeight = 946;
 	const [mainImageOffset,setMainImageOffset] = useState([]);
 
+	const [startTimerId,setStartTimerId] = useState(0);
+	const [markCounter,setMarkCounter] = useState(0);
+
+
+	const startTimer = () => {
+		let start_time = new Date().getTime()/1000;
+
+		firebase.firestore().collection('timers').add({
+			startTime: start_time,
+		}).then(function(messsageRef){
+			console.log(messsageRef.id);
+			setStartTimerId(messsageRef.id);
+		}).catch(function(error){
+			console.error("There was an error uploading to Cloud Storage:",error);
+		})
+	};
+
+
+	const isGameOver = async () => {
+		if(markCounter == 3)
+		{
+			console.log("game over!");
+			let startTimeRef = firebase.firestore().collection('timers').doc(startTimerId);
+
+			try
+			{
+				let docRef = await startTimeRef.get();
+				if(docRef.exists)
+				{
+
+					let start_time = docRef.data()['startTime'];
+					let end_time = new Date().getTime()/1000;
+
+					console.log(end_time-start_time);
+
+				}
+				else
+				{
+					console.log("No such document!");
+				}
+			}
+			catch (error)
+			{
+				console.log("Error getting document:",error);
+			}
+		}
+	};
+
+
 	const standardizedSolution = () => {
 
 		//let solutionObj = Object.assign({},props.solution);
 		let solutionObj = Object.assign({},initSolutionObj);
-		console.log("init"+initSolutionObj);
+	
 		for (const property in solutionObj)
 		{
 			let currentWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
@@ -68,7 +117,6 @@ function Level(props){
 			let docRef = await solutionsRef.get();
 			if(docRef.exists)
 			{
-				console.log("Document Data:",docRef.data());
 				setInitSolutionObj(docRef.data());
 			}
 			else
@@ -91,6 +139,8 @@ function Level(props){
 		let copyArr2 = [...peopleDropDownAttributes];
 		copyArr2[index].push("person-found-dropdown");
 		setPeopleDropDownAttributes(copyArr2);
+
+		setMarkCounter((prev)=>prev+1);
 	};
 
 	const drawCircle = (target) => { 
@@ -212,12 +262,18 @@ function Level(props){
 
 	};
 
+
+	useEffect(()=>{
+		isGameOver();
+	},[markCounter]);
+
 	useEffect(()=>{
 		standardizedSolution();
 	},[initSolutionObj]);
 
 	useEffect(()=>{
 		init();
+		startTimer();
 	},[]);
 	
 	useEffect(()=>{
