@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState,useRef } from "react";
 import { useHistory,Link } from "react-router-dom";
 import firebase from "firebase";
 import Card from "./Card.js";
@@ -7,14 +7,39 @@ import Card from "./Card.js";
 
 function LeaderBoard(props){
 
+	const [listOfUsers,setListOfUsers] = useState([]);
+
+	const usersRef = useRef(listOfUsers);
+
 	const getData = (level) => {
 
 		let query = firebase.firestore()
-                  .collection('leaderboard')
-                  .orderBy('time', 'desc')
+                  .collection('leaderboard').doc('level '+level).collection('users')
+                  .orderBy('time', 'asc')
                   .limit(25);
 
-        console.log(query);
+
+        query.onSnapshot(function(snapshot) {
+		    snapshot.docChanges().forEach(function(change) {
+		      if (change.type === 'removed') {
+		       
+		      }
+		      else {		      	
+	      		let message = change.doc.data();
+
+	      		//[[name,time],[name,time]]
+	      		//let copyArr = [...usersRef.current];
+	      		let copyArr = [...listOfUsers];
+	      		console.log("copyArr");
+	      		console.log(copyArr);
+	      		copyArr.push([message.name,message.time]);
+	      		console.log(copyArr);
+	      		setListOfUsers(copyArr);
+	      		//usersRef.current = copyArr;
+
+		      }
+		    });
+		});
 	};
 
 	return(
@@ -28,7 +53,9 @@ function LeaderBoard(props){
 				<div onClick = {() => getData(2)}><Card imgSrc={props.levelSettings[2].imgSrcCropped} pics = {props.levelSettings[2].findPeoplePics} level={"LEVEL 3"}/></div>
 			</div>
 			<div className="leaderboard-scores">
-
+				{listOfUsers.map((entry)=>{
+					return <div className="entry-row">{entry.name}</div>
+				})}
 			</div>
 		</div>
 

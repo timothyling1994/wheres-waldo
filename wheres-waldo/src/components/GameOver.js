@@ -10,7 +10,7 @@ function GameOver(props){
 		let username = document.querySelector(".name-input").value;
 		let final_time = Math.round(props.finalTime*100)/100;
 
-		firebase.firestore().collection('leaderboard').doc("level "+ props.currentLevel).set({
+		firebase.firestore().collection('leaderboard').doc("level "+ props.currentLevel).collection('users').doc(props.getTimerSession).set({
 			name:username,
 			time:final_time
 		});

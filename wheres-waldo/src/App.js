@@ -43,6 +43,10 @@ function App() {
     setTimerId(value);
   };
 
+  const getTimerSession = () => {
+    return timerId;
+  };
+
   return (
     <div className="App">
       <BrowserRouter>

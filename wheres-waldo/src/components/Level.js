@@ -309,7 +309,7 @@ function Level(props){
 		<div className="Level">
 			<Link to={"/"} className="link"><div className="header">WHERE'S WALDO</div></Link>
 			<div className="game-over-modal">
-				{gameOver ? <GameOver finalTime={finalTime} toggleGameOverModal={toggleGameOverModal} currentLevel={currentLevel}/> : null}
+				{gameOver ? <GameOver finalTime={finalTime} toggleGameOverModal={toggleGameOverModal} currentLevel={currentLevel} getTimerSession={props.getTimerSession}/> : null}
 			</div>
 			<div className={findPeopleAttributes.join(" ")}>
 				<div className="people">
