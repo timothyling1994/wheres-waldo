@@ -9,37 +9,45 @@ function LeaderBoard(props){
 
 	const [listOfUsers,setListOfUsers] = useState([]);
 
-	const usersRef = useRef(listOfUsers);
+	//const [selected,setSelected] = useState(false);
+
+	const usersRef = useRef([]);
 
 	const getData = (level) => {
 
-		let query = firebase.firestore()
+		usersRef.current = [];
+		//if(!selected)
+		{
+			let query = firebase.firestore()
                   .collection('leaderboard').doc('level '+level).collection('users')
                   .orderBy('time', 'asc')
                   .limit(25);
 
 
-        query.onSnapshot(function(snapshot) {
-		    snapshot.docChanges().forEach(function(change) {
-		      if (change.type === 'removed') {
-		       
-		      }
-		      else {		      	
-	      		let message = change.doc.data();
+	        query.onSnapshot(function(snapshot) {
+			    snapshot.docChanges().forEach(function(change) {
 
-	      		//[[name,time],[name,time]]
-	      		//let copyArr = [...usersRef.current];
-	      		let copyArr = [...listOfUsers];
-	      		console.log("copyArr");
-	      		console.log(copyArr);
-	      		copyArr.push([message.name,message.time]);
-	      		console.log(copyArr);
-	      		setListOfUsers(copyArr);
-	      		//usersRef.current = copyArr;
+			      	if (change.type == 'removed') {
+			       		console.log('DIFFERENT');
+				    }
+				    else
+				    {		      	
+			      		let message = change.doc.data();
 
-		      }
-		    });
-		});
+			      		//[[name,time],[name,time]]
+			      		let copyArr = [...usersRef.current];
+			      		//let copyArr = [...listOfUsers];
+			      		console.log("copyArr");
+			      		console.log(copyArr);
+			      		copyArr.push([message.name,message.time]);
+			      		console.log(copyArr);
+			      		setListOfUsers(copyArr);
+			      		usersRef.current = copyArr;
+
+				    }
+			    });
+			});
+		}
 	};
 
 	return(
@@ -54,7 +62,12 @@ function LeaderBoard(props){
 			</div>
 			<div className="leaderboard-scores">
 				{listOfUsers.map((entry)=>{
-					return <div className="entry-row">{entry.name}</div>
+					return(
+						<div className="entry-row">
+							<div className="username">{entry[0]}</div>
+							<div className="final-time">{entry[1]}</div>
+						</div>
+					)
 				})}
 			</div>
 		</div>
