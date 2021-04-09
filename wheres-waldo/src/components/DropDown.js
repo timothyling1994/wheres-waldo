@@ -1,5 +1,4 @@
 import React from "react";
-import {useState, useRef, useEffect} from "react";
 
 function DropDown(props){
 
@@ -28,7 +27,6 @@ function DropDown(props){
 		else
 		{
 			let currentRect = document.querySelector(".currentSelection");
-			console.log(currentRect);
 			currentRect.style.borderColor="red";
 			currentRect.classList.add("shake");
 			setTimeout(function(){

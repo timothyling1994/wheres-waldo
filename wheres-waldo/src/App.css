@@ -316,4 +316,17 @@ html,body{
   background-color: red;
 }
 
+.LeaderBoard{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content: center;
+  align-content: center;
+}
+
+.leaderboard-header{
+  width:100%;
+  text-align: center;
+  background-color: orange;
+}
+
 

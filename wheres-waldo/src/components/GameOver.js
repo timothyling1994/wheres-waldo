@@ -1,6 +1,5 @@
 import React from "react";
-import Card from "./Card.js";
-import { useHistory,Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import firebase from "firebase";
 
 
@@ -11,16 +10,22 @@ function GameOver(props){
 		let username = document.querySelector(".name-input").value;
 		let final_time = Math.round(props.finalTime*100)/100;
 
-		firebase.firestore().collection('leaderboard').add({
+		firebase.firestore().collection('leaderboard').doc("level "+ props.currentLevel).set({
 			name:username,
 			time:final_time
 		});
 
-		//const history = useHistory();
 
 		props.toggleGameOverModal(false);
-		//history.push('/');
+		props.history.push("/leaderboard");
+		
 	};
+
+	const cancel = () => {
+
+		props.toggleGameOverModal(false);
+		props.history.push("/");
+	}
 
 	return(
 		
@@ -33,7 +38,7 @@ function GameOver(props){
 				</div>
 				<div className="modal-button-row">
 					<div className="modal-submit" onClick={submit_score}>SUBMIT</div>
-					<div className="modal-cancel">CANCEL</div>
+					<div className="modal-cancel" onClick={cancel}>CANCEL</div>
 				</div>
 
 			</div>
@@ -42,4 +47,4 @@ function GameOver(props){
 	);
 }
 
-export default GameOver;
+export default withRouter(GameOver);

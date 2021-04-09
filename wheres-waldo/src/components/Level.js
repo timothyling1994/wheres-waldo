@@ -42,6 +42,7 @@ function Level(props){
 			startTime: start_time,
 		}).then(function(messsageRef){
 			console.log(messsageRef.id);
+			props.setTimerSession(messsageRef.id);
 			setStartTimerId(messsageRef.id);
 		}).catch(function(error){
 			console.error("There was an error uploading to Cloud Storage:",error);
@@ -283,10 +284,8 @@ function Level(props){
 
 	useEffect(()=>{
 		window.addEventListener('scroll',handleScroll);
-		//window.onresize = windowResize;
 
 		return () => {
-			window.removeEventListener("scroll", handleScroll)
 			clearDropDown();
 			clearAllCircles();
 		};
@@ -297,6 +296,7 @@ function Level(props){
 
 		return () => {
 			window.removeEventListener('resize',windowResize);
+			window.removeEventListener("scroll", handleScroll);
 		};
 	});
 
@@ -309,7 +309,7 @@ function Level(props){
 		<div className="Level">
 			<Link to={"/"} className="link"><div className="header">WHERE'S WALDO</div></Link>
 			<div className="game-over-modal">
-				{gameOver ? <GameOver finalTime={finalTime} toggleGameOverModal={toggleGameOverModal}/> : null}
+				{gameOver ? <GameOver finalTime={finalTime} toggleGameOverModal={toggleGameOverModal} currentLevel={currentLevel}/> : null}
 			</div>
 			<div className={findPeopleAttributes.join(" ")}>
 				<div className="people">

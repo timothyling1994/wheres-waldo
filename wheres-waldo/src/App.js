@@ -3,6 +3,7 @@ import {useState} from "react";
 import { BrowserRouter,Switch,Route } from "react-router-dom";
 import Home from "./components/Home.js";
 import Level from "./components/Level.js";
+import LeaderBoard from "./components/LeaderBoard.js";
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
   ]
 
   const [currentLevel,setCurrentLevel] = useState(0);
+  const [timerId,setTimerId] = useState('');
 
   const setLevel = (level) => {
     setCurrentLevel(level);
@@ -37,13 +39,17 @@ function App() {
     return currentLevel;
   };
 
+  const setTimerSession = (value) => {
+    setTimerId(value);
+  };
+
   return (
     <div className="App">
       <BrowserRouter>
         <Switch>
           <Route exact path="/" render={() => (<Home levelSettings={levelSettings} setLevel={setLevel} />)} />
-          <Route exact path="/game" render={(props) => (<Level levelSettings={levelSettings} getLevel={getLevel}/>)}/>
-          <Route exact path="/leaderboard" render={null} />
+          <Route exact path="/game" render={(props) => (<Level levelSettings={levelSettings} getLevel={getLevel} setTimerSession={setTimerSession}/>)}/>
+          <Route exact path="/leaderboard" render={(props)=>(<LeaderBoard levelSettings={levelSettings}/>)} />
         </Switch>
       </BrowserRouter>
     </div>
