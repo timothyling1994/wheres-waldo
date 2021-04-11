@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import DropDown from "./DropDown.js";
 import GameOver from "./GameOver.js";
 import firebase from "firebase";
+import uniqid from "uniqid";
 
 function Level(props){
 
@@ -251,7 +252,6 @@ function Level(props){
 	};
 
 	const handleScroll = () => {
-		console.log('trigger');
 
 		const offset = window.scrollY;
 		const main_img = document.querySelector(".main-img-container");
@@ -342,12 +342,12 @@ function Level(props){
 			</div>
 			<div className="main-img-container">
 				{foundObjects.map((value,index)=> {
-					return <div className="rectBox found correct" style={{left:mainImageOffset[0]+value[0]-50+'px',top:mainImageOffset[1]+value[1]-50+'px',borderRadius:'50%'}}></div>
+					return <div className="rectBox found correct" key={uniqid()} style={{left:mainImageOffset[0]+value[0]-50+'px',top:mainImageOffset[1]+value[1]-50+'px',borderRadius:'50%'}}></div>
 				})}
 				{currentSelection.map((value,index)=> {
-					return <div className="rectBox currentSelection" style={{left:mainImageOffset[0]+value[0]-50+'px',top:mainImageOffset[1]+value[1]-50+'px',borderRadius:'50%'}}></div>
+					return <div className="rectBox currentSelection" key={uniqid()} style={{left:mainImageOffset[0]+value[0]-50+'px',top:mainImageOffset[1]+value[1]-50+'px',borderRadius:'50%'}}></div>
 				})}
-				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} currentSelection={currentSelection} setCurrentSelection={setCurrentSelection} isCorrectSelection={isCorrectSelection} toggleDropDown={toggleDropDown} mainImageOffset={mainImageOffset} foundObjects={foundObjects} setFoundObjects={setFoundObjects} markFound={markFound} peopleDropDownAttributes={peopleDropDownAttributes}/> : null}
+				{showSelectionDropDown ? <DropDown thisLevelSettings={thisLevelSettings} key={uniqid()} currentSelection={currentSelection} setCurrentSelection={setCurrentSelection} isCorrectSelection={isCorrectSelection} toggleDropDown={toggleDropDown} mainImageOffset={mainImageOffset} foundObjects={foundObjects} setFoundObjects={setFoundObjects} markFound={markFound} peopleDropDownAttributes={peopleDropDownAttributes}/> : null}
 				<img onClick={(target)=>{drawCircle(target)}} className="main-img" src={thisLevelSettings.imgSrc} alt="main level"></img>
 			</div>
 		</div>

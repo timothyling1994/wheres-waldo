@@ -3,6 +3,7 @@ import { useState,useRef } from "react";
 import { Link } from "react-router-dom";
 import firebase from "firebase";
 import Card from "./Card.js";
+import uniqid from "uniqid";
 
 
 function LeaderBoard(props){
@@ -89,23 +90,24 @@ function LeaderBoard(props){
 			</div>
 			<div className="leaderboard-scores">
 				<table>
-					
-					{listOfUsers.length > 0 ?
-						<tr>
-							<th>Username</th>
-							<th>Time</th>
-						</tr> :
-						null
-					}
+					<tbody>
+						{listOfUsers.length > 0 ?
+							<tr>
+								<th>Username</th>
+								<th>Time</th>
+							</tr> :
+							null
+						}
 
-					{listOfUsers.map((entry)=>{
-						return(
-							<div className="entry-container">
-								<th className="username">{entry[0]}</th>
-								<th className="final-time">{entry[1]+'s'}</th>
-							</div>
-						)
-					})}
+						{listOfUsers.map((entry)=>{
+							return(
+								<tr key= {uniqid()} className="entry-container">
+									<th className="username">{entry[0]}</th>
+									<th className="final-time">{entry[1]+'s'}</th>
+								</tr>
+							)
+						})}
+					</tbody>
 				</table>
 			</div>
 		</div>

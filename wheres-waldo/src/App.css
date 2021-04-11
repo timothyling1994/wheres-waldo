@@ -379,6 +379,8 @@ table{
   width:60vw;
   display:flex;
   flex-wrap:wrap;
+  justify-content: center;
+  align-content: center;
   border-collapse: collapse;
 }
 
@@ -397,6 +399,7 @@ th{
 
 .entry-container{
   width:100%;
+  background-color: white;
 }
 
 
