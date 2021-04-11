@@ -263,8 +263,7 @@ html,body{
   margin: 15% auto;
   background-color: #fefefe;
   border: 1px solid #888;
-  width:50%;
-  height:50%;
+  width:50%;  
 }
 
 .modal-header{
@@ -333,6 +332,10 @@ html,body{
   width:100%;
   text-align: center;
   background-color: orange;
+}
+
+.leaderboard-highlight{
+  border:solid orange 4px;
 }
 
 .home-leaderboard-container{
