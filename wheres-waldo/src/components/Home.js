@@ -15,6 +15,16 @@ function Home(props){
 				<Link to={"/game"} onClick={()=>props.setLevel(1)} className="link"><Card imgSrc={props.levelSettings[1].imgSrcCropped} pics = {props.levelSettings[1].findPeoplePics} level={"LEVEL 2"}/></Link>
 				<Link to={"/game"} onClick={()=>props.setLevel(2)} className="link"><Card imgSrc={props.levelSettings[2].imgSrcCropped} pics = {props.levelSettings[2].findPeoplePics} level={"LEVEL 3"}/></Link>
 			</div>
+
+			<div className="home-leaderboard-container">
+				<div className="home-leaderboard-description-container">
+					<div className="home-leaderboard-description">ARE YOU A WHERE'S WALDO EXPERT?</div>
+					<div className="home-leaderboard-description">VIEW THE LEADERBOARD</div>
+				</div>
+				<div className="home-leaderboard-btn-container">
+					<Link to={"/leaderboard"} className="link"><div className="home-leaderboard-btn">VIEW LEADERBOARD</div></Link>
+				</div>
+			</div>
 		</div>
 
 	);

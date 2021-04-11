@@ -8,9 +8,9 @@ function Card(props){
 			<div className="card-description">
 				<div className="level-label">{props.level}</div>
 				<div className="profile-pic-container">
-					<img src={props.pics[0]} alt="find this person #1"></img>
-					<img src={props.pics[1]} alt="find this person #2"></img>
-					<img src={props.pics[2]} alt="find this person #3"></img>
+					<img className="card-profile-pic" src={props.pics[0]} alt="find this person #1"></img>
+					<img className="card-profile-pic" src={props.pics[1]} alt="find this person #2"></img>
+					<img className="card-profile-pic" src={props.pics[2]} alt="find this person #3"></img>
 				</div>
 			</div>
 		</div>

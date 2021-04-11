@@ -251,6 +251,7 @@ function Level(props){
 	};
 
 	const handleScroll = () => {
+		console.log('trigger');
 
 		const offset = window.scrollY;
 		const main_img = document.querySelector(".main-img-container");
@@ -258,13 +259,19 @@ function Level(props){
 		if(offset>50)
 		{
 			setFindPeopleAttributes(['find-people-container','sticky']);
-			main_img.classList.add("shift-main-image");
+			if(main_img !== null)
+			{
+				main_img.classList.add("shift-main-image");
+			}
 
 		}
 		else
 		{
 			setFindPeopleAttributes(['find-people-container']);
-			main_img.classList.remove("shift-main-image");
+			if(main_img !== null)
+			{
+				main_img.classList.remove("shift-main-image");
+			}
 		}
 
 	};
@@ -283,9 +290,12 @@ function Level(props){
 	},[initSolutionObj]);
 
 	useEffect(()=>{
+
+		console.log("scroll");
 		window.addEventListener('scroll',handleScroll);
 
 		return () => {
+			window.removeEventListener("scroll", handleScroll);
 			clearDropDown();
 			clearAllCircles();
 		};
@@ -296,7 +306,6 @@ function Level(props){
 
 		return () => {
 			window.removeEventListener('resize',windowResize);
-			window.removeEventListener("scroll", handleScroll);
 		};
 	});
 

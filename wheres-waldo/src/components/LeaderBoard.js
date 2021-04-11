@@ -61,14 +61,25 @@ function LeaderBoard(props){
 				<div onClick = {() => getData(2)}><Card imgSrc={props.levelSettings[2].imgSrcCropped} pics = {props.levelSettings[2].findPeoplePics} level={"LEVEL 3"}/></div>
 			</div>
 			<div className="leaderboard-scores">
-				{listOfUsers.map((entry)=>{
-					return(
-						<div className="entry-row">
-							<div className="username">{entry[0]}</div>
-							<div className="final-time">{entry[1]}</div>
-						</div>
-					)
-				})}
+				<table>
+					
+					{listOfUsers.length > 0 ?
+						<tr>
+							<th>Username</th>
+							<th>Time</th>
+						</tr> :
+						null
+					}
+
+					{listOfUsers.map((entry)=>{
+						return(
+							<div className="entry-container">
+								<th className="username">{entry[0]}</th>
+								<th className="final-time">{entry[1]+'s'}</th>
+							</div>
+						)
+					})}
+				</table>
 			</div>
 		</div>
 
