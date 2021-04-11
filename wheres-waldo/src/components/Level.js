@@ -25,7 +25,7 @@ function Level(props){
 
 	//solution is standardized to this width and height
 	const initWidth = 1355;
-	const initHeight = 946;
+	//const initHeight = 946;
 	const [mainImageOffset,setMainImageOffset] = useState([]);
 
 	const [startTimerId,setStartTimerId] = useState(0);
@@ -51,7 +51,7 @@ function Level(props){
 
 
 	const isGameOver = async () => {
-		if(markCounter == 3)
+		if(markCounter === 3)
 		{
 			console.log("game over!");
 			let startTimeRef = firebase.firestore().collection('timers').doc(startTimerId);
@@ -91,7 +91,7 @@ function Level(props){
 		for (const property in solutionObj)
 		{
 			let currentWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-			let currentHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+			//let currentHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
 
 			let scaledXCoord = (1-(initWidth-currentWidth)/initWidth)*solutionObj[property][0];
 			let scaledYCoord = (1-(initWidth-currentWidth)/initWidth)*solutionObj[property][1];
@@ -217,7 +217,7 @@ function Level(props){
 	const windowResize = () => {
 		
 		let resizedWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-		let resizedHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+		//let resizedHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
 
 
 		if(currentSelection.length !== 0)

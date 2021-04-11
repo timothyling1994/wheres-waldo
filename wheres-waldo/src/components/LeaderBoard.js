@@ -1,6 +1,6 @@
 import React from "react";
 import { useState,useRef } from "react";
-import { useHistory,Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import firebase from "firebase";
 import Card from "./Card.js";
 
@@ -27,7 +27,7 @@ function LeaderBoard(props){
 	        query.onSnapshot(function(snapshot) {
 			    snapshot.docChanges().forEach(function(change) {
 
-			      	if (change.type == 'removed') {
+			      	if (change.type === 'removed') {
 			       		console.log('DIFFERENT');
 				    }
 				    else
