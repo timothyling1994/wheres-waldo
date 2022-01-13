@@ -27,7 +27,6 @@ function LeaderBoard(props){
 
 	        query.onSnapshot(function(snapshot) {
 			    snapshot.docChanges().forEach(function(change) {
-
 			      	if (change.type === 'removed') {
 			       		let message = change.doc.data();
 			       		let copyArr = [...usersRef.current];
