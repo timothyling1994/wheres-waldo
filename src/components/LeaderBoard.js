@@ -32,7 +32,7 @@ function LeaderBoard(props){
 			       		let copyArr = [...usersRef.current];
 			       		for(let i=0;i<copyArr.length;i++)
 			       		{
-			       			if(copyArr[i].[0]==message.name && copyArr[i][1]==message.time)
+			       			if(copyArr[i].[0]===message.name && copyArr[i][1]===message.time)
 			       			{
 			       				copyArr.splice(i,1);
 			       			}
